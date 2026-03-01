@@ -1,165 +1,148 @@
 \documentclass[11pt,a4paper]{article}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
-\usepackage[top=0.65in, bottom=0.65in, left=0.70in, right=0.65in]{geometry}
+\usepackage[top=0in, bottom=0in, left=0in, right=0in]{geometry}
 \usepackage{xcolor}
 \usepackage{hyperref}
 \usepackage{enumitem}
-\usepackage{tabularx}
+\usepackage{multicol}
 \usepackage{array}
 \usepackage{microtype}
-\usepackage{parskip}
-\usepackage{mdframed}
 \usepackage{tikz}
-\usepackage{lmodern}
+\usepackage{fontawesome5}
 
 % ── Colours ──────────────────────────────────────────────────────────────────
-\definecolor{emerald}{RGB}{5, 150, 105}
-\definecolor{emlt}{RGB}{209, 250, 229}
-\definecolor{emmd}{RGB}{110, 231, 183}
-\definecolor{slate}{RGB}{30, 41, 59}
-\definecolor{slatemd}{RGB}{51, 65, 85}
-\definecolor{muted}{RGB}{100, 116, 139}
-\definecolor{line}{RGB}{226, 232, 240}
-\definecolor{cream}{RGB}{248, 250, 252}
+\definecolor{primaryyellow}{RGB}{196, 229, 56}
+\definecolor{darkgray}{RGB}{26, 26, 26}
+\definecolor{lightgray}{RGB}{245, 245, 245}
+\definecolor{textdark}{RGB}{26, 26, 26}
+\definecolor{textlight}{RGB}{102, 102, 102}
+\definecolor{accent}{RGB}{196, 229, 56}
 
 % ── Hyperref ─────────────────────────────────────────────────────────────────
-\hypersetup{colorlinks=true, urlcolor=emerald, hidelinks}
+\hypersetup{colorlinks=true, urlcolor=accent, hidelinks}
 
 % ── No page numbers ───────────────────────────────────────────────────────────
 \pagestyle{empty}
 
-% ── Left-bar section heading ──────────────────────────────────────────────────
-% Usage: \classsec{Title}
+% ── Fonts ─────────────────────────────────────────────────────────────────────
+\usepackage{noto}
+
+% ── Section heading ───────────────────────────────────────────────────────────
 \newcommand{\classsec}[1]{%
-  \vspace{10pt}%
-  \noindent
-  \begin{tikzpicture}[baseline=(t.base)]
-    \fill[emerald] (0,-0.05) rectangle (0.18, 0.72);
-    \node[anchor=west, inner sep=0pt] (t) at (0.26,0.32)
-      {\fontsize{8pt}{9pt}\selectfont\bfseries\color{slatemd}\MakeUppercase{#1}};
-  \end{tikzpicture}%
+  \vspace{8pt}%
+  {\fontsize{14pt}{16pt}\selectfont\bfseries\color{textdark} #1}%
   \vspace{4pt}%
   \newline%
 }
 
-% ── Education row: degree | institution | year | pct ─────────────────────────
-\newcommand{\edurow}[4]{%
+% ── Education entry ───────────────────────────────────────────────────────────
+\newcommand{\eduentry}[4]{%
   \noindent\makebox[\linewidth]{%
-    \begin{minipage}[t]{0.72\linewidth}
-      {\small\bfseries\color{slate} #1}\\
-      {\footnotesize\color{muted} #2}
+    \colorbox{primaryyellow}{{\fontsize{8pt}{9pt}\selectfont\bfseries\color{textdark} #1}}%
+    \hspace{10pt}%
+    \begin{minipage}[t]{0.55\linewidth}
+      {\fontsize{10pt}{11pt}\selectfont\bfseries\color{textdark} #2}\\
+      {\fontsize{9pt}{10pt}\selectfont\color{textlight} #3}
     \end{minipage}%
     \hfill
-    \begin{minipage}[t]{0.24\linewidth}
-      \raggedleft
-      {\small\bfseries\color{slatemd} #3}\\
-      {\footnotesize\bfseries\color{emerald} #4}
-    \end{minipage}%
+    \ifx&#4&\else{\fontsize{9pt}{10pt}\selectfont\bfseries\color{accent} #4}\fi%
   }%
-  \vspace{4pt}%
-  \noindent{\color{line}\rule{\linewidth}{0.4pt}}%
-  \vspace{4pt}\\
+  \vspace{6pt}%
+  \newline%
 }
 
-% ── Skill block: category + items ────────────────────────────────────────────
-\newcommand{\skillblock}[2]{%
-  {\fontsize{8.5pt}{10pt}\selectfont\bfseries\color{muted}\MakeUppercase{#1}}\\[3pt]
-  {\small #2}%
-  \vspace{6pt}\\
+% ── Skill entry ───────────────────────────────────────────────────────────────
+\newcommand{\skillentry}[2]{%
+  {\fontsize{10pt}{11pt}\selectfont\bfseries\color{textdark} #1}\\
+  {\fontsize{9pt}{10pt}\selectfont\color{textlight} #2}%
+  \vspace{6pt}%
 }
 
-% ── Achievement / list row with right-flush date ─────────────────────────────
-\newcommand{\listrow}[3]{%
-  % #1 title, #2 description, #3 date
-  \noindent\makebox[\linewidth]{%
-    {\small\bfseries\color{slate} #1}%
-    \ifx&#2&\else{\small\color{muted} \space— #2}\fi%
-    \hfill
-    {\small\bfseries\color{emerald} #3}%
-  }%
-  \vspace{3pt}%
-  \noindent{\color{line}\rule{\linewidth}{0.4pt}}%
-  \vspace{3pt}\\
-}
-
-% ── Volunteering block ───────────────────────────────────────────────────────
-\newcommand{\volblock}[3]{%
-  \noindent\makebox[\linewidth]{%
-    {\small\bfseries\color{slate} #1}%
-    \hfill
-    {\small\color{emerald} #2}%
-  }%
-  \\[-2pt]
-  \ifx&#3&\else{\footnotesize\color{muted} #3}\\\fi%
-  \vspace{2pt}%
-  \noindent{\color{line}\rule{\linewidth}{0.4pt}}%
-  \vspace{3pt}\\
+% ── Achievement entry ─────────────────────────────────────────────────────────
+\newcommand{\achieventry}[3]{%
+  {\fontsize{10pt}{11pt}\selectfont\bfseries\color{textdark} #1}%
+  \ifx&#2&\else{\fontsize{9pt}{10pt}\selectfont\color{textlight} — #2}\fi\\
+  \ifx&#3&\else{\fontsize{9pt}{10pt}\selectfont\bfseries\color{accent} #3}\fi%
+  \vspace{5pt}%
+  \newline%
 }
 
 % ── List style ────────────────────────────────────────────────────────────────
 \setlist[itemize]{nosep, leftmargin=1.2em, itemsep=2pt, topsep=2pt,
-  label=\textcolor{emerald}{\textbullet}}
+  label=\textcolor{primaryyellow}{\textbullet}}
 
 % ─────────────────────────────────────────────────────────────────────────────
 \begin{document}
 
-% ── HEADER ───────────────────────────────────────────────────────────────────
 \noindent
-\begin{tikzpicture}[remember picture, overlay]
-  % left green bar spanning entire header height (approx)
-  \fill[emerald] (0, 0) rectangle (0.18, -2.6cm);
-\end{tikzpicture}%
-\hspace{0.32cm}%
-\begin{minipage}[t]{\dimexpr\linewidth - 0.32cm\relax}
-  {\fontsize{28pt}{30pt}\selectfont\bfseries\color{slate} <<n>>}\\[4pt]
-  {\fontsize{11pt}{13pt}\selectfont\bfseries\color{emerald} <<role>>\ifx<<track>>\empty\else\enspace·\enspace <<track>>\fi}\\[6pt]
-  {\fontsize{9.5pt}{11pt}\selectfont\color{muted}
-    \texttt{<<email>>}\enspace
-    \textbar\enspace <<phone>>\enspace
-    \textbar\enspace <<location>>\enspace
-    \textbar\enspace CTS ID: \textbf{<<cognizantId>>}%
+\begin{minipage}[t]{0.35\linewidth}
+  % Photo placeholder
+  \colorbox{primaryyellow}{%
+    \begin{minipage}[c]{0.95\linewidth}
+      \vspace{70pt}
+      \hfill
+      \vspace{70pt}
+    \end{minipage}%
   }
-\end{minipage}
-
-\vspace{6pt}
-\noindent{\color{emerald}\rule{\linewidth}{2pt}}
-\vspace{8pt}
-
-% ── EDUCATION ────────────────────────────────────────────────────────────────
-\classsec{Education}
-<<education>>
-
-% ── TECHNICAL SKILLS ─────────────────────────────────────────────────────────
-\classsec{Technical Skills}
-\begin{minipage}[t]{0.48\linewidth}
-<<technicalSkillsLeft>>
+  
+  \vspace{15pt}
+  
+  % Education
+  \classsec{Education}
+  <<education>>
+  
+  \vspace{10pt}
+  
+  % Skills
+  \classsec{Skills}
+  <<technicalSkills>>
+  
 \end{minipage}%
 \hfill
-\begin{minipage}[t]{0.48\linewidth}
-<<technicalSkillsRight>>
+\begin{minipage}[t]{0.60\linewidth}
+  
+  % Header
+  \vspace{-10pt}
+  {\fontsize{32pt}{36pt}\selectfont\bfseries\color{textdark} <<n>>}\\[3pt]
+  \colorbox{primaryyellow}{{\fontsize{11pt}{12pt}\selectfont\bfseries\color{textdark} \hspace{5pt}<<role>>\hspace{5pt}}}\\[8pt]
+  {\fontsize{9.5pt}{11pt}\selectfont\color{textlight}
+    \textbullet~<<phone>> \quad \textbullet~<<email>> \\
+    \textbullet~<<location>>
+  }
+  
+  \vspace{15pt}
+  
+  % Profile
+  \classsec{Profile}
+  {\fontsize{10pt}{11pt}\selectfont\color{textlight}
+    Professional with expertise in <<role>>. Dedicated to delivering high-quality results and continuous improvement. Strong background in strategic planning and execution.
+  }
+  
+  \vspace{12pt}
+  
+  % Experience
+  \classsec{Experience}
+  <<experience>>
+  
+  \vspace{10pt}
+  
+  % Achievements
+  \classsec{Achievements}
+  <<achievements>>
+  
+  \vspace{10pt}
+  
+  % Volunteering
+  \classsec{Volunteering}
+  <<volunteering>>
+  
+  \vspace{10pt}
+  
+  % Strengths
+  \classsec{Core Strengths}
+  <<strengths>>
+  
 \end{minipage}
-
-\vspace{4pt}
-
-% ── CAPSTONE PROJECT ─────────────────────────────────────────────────────────
-\classsec{Capstone Project}
-<<capstone>>
-
-% ── ACHIEVEMENTS ─────────────────────────────────────────────────────────────
-\classsec{Achievements \& Awards}
-<<achievements>>
-
-% ── VOLUNTEERING ─────────────────────────────────────────────────────────────
-\classsec{Volunteering}
-<<volunteering>>
-
-% ── SPORTS, ARTS & ACCOMPLISHMENTS ───────────────────────────────────────────
-\classsec{Sports, Arts \& Accomplishments}
-<<sportsArts>>
-
-% ── STRENGTHS ────────────────────────────────────────────────────────────────
-\classsec{Strengths}
-<<strengths>>
 
 \end{document}
