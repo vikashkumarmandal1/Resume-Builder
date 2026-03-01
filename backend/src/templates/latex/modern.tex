@@ -1,45 +1,214 @@
-\documentclass[11pt,a4paper]{article}
+\documentclass[12pt,a4paper]{article}
 \usepackage[utf8]{inputenc}
-\usepackage[margin=0.75in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage[margin=0in]{geometry}        % full-bleed; we control margins manually
+\usepackage{xcolor}
+\usepackage{graphicx}
+\usepackage{tikz}
 \usepackage{enumitem}
 \usepackage{hyperref}
-\usepackage{xcolor}
-\definecolor{accent}{RGB}{14,165,233}
+\usepackage{array}
+\usepackage{tabularx}
+\usepackage{booktabs}
+\usepackage{microtype}
+\usepackage{lmodern}
+\usepackage{mdframed}
+\usepackage{parskip}
+
+% ── Colours ──────────────────────────────────────────────────────────────────
+\definecolor{navydk}{RGB}{22, 46, 74}      % dark navy header / sidebar bg
+\definecolor{navy}{RGB}{27, 58, 92}
+\definecolor{accentblue}{RGB}{42, 122, 191} % section titles, dates, links
+\definecolor{accentbright}{RGB}{59,143,209}
+\definecolor{muted}{RGB}{100, 116, 139}
+\definecolor{linecolor}{RGB}{212, 221, 232}
+\definecolor{headtext}{RGB}{255,255,255}
+\definecolor{subtext}{RGB}{168, 196, 224}
+
+% ── Hyperref ─────────────────────────────────────────────────────────────────
+\hypersetup{colorlinks=true, urlcolor=accentblue, hidelinks}
+
+% ── Suppress page numbers ────────────────────────────────────────────────────
 \pagestyle{empty}
+
+% ── List style ───────────────────────────────────────────────────────────────
+\setlist[itemize]{
+  nosep,
+  leftmargin=1.2em,
+  itemsep=1.72pt,
+  topsep=2.3pt,
+  label=\textcolor{accentblue}{\textbullet}
+}
+
+% ── Sidebar bullet list (no indent, navy dot) ─────────────────────────────────
+\newlist{sblist}{itemize}{1}
+\setlist[sblist]{
+  nosep, leftmargin=1em, itemsep=1.72pt, topsep=2.3pt,
+  label=\textcolor{accentblue}{\small\textbullet}
+}
+
+% ────────────────────────────────────────────────────────────────────────────
+% HELPER MACROS
+% ────────────────────────────────────────────────────────────────────────────
+
+% Section heading in main panel
+\newcommand{\mainsec}[1]{%
+  {\fontsize{8.62pt}{10.35pt}\selectfont
+   \bfseries\color{navy}\MakeUppercase{#1}}%
+  \vspace{2.3pt}%
+  \noindent{\color{accentbright}\rule{\linewidth}{1.38pt}}%
+  \vspace{5.75pt}%
+}
+
+% Section heading in sidebar
+\newcommand{\sbsec}[1]{%
+  \vspace{10.35pt}%
+  {\fontsize{8.05pt}{9.2pt}\selectfont
+   \bfseries\color{accentblue}\MakeUppercase{#1}}%
+  \vspace{5.75pt}%
+  \newline%
+}
+
+% Achievement row: title \hfill date
+\newcommand{\achrow}[2]{%
+  \noindent\makebox[\linewidth]{%
+    {\small #1}\hfill{\small\color{accentblue}\textbf{#2}}%
+  }%
+  \vspace{2.3pt}%
+  {\color{linecolor}\hrule height 0.46pt}%
+  \vspace{3.45pt}%
+}
+
+% Volunteering block: org / role
+\newcommand{\volblock}[3]{%
+  \noindent\makebox[\linewidth]{%
+    {\small\bfseries #1}\hfill{\small\color{accentblue}\textbf{#2}}%
+  }%
+  \vspace{1.15pt}\\
+  {\footnotesize\color{muted} #3}%
+  \vspace{6.9pt}\\
+}
+
+% Education item in sidebar
+\newcommand{\eduitem}[3]{%
+  {\small\bfseries #1}\\
+  {\footnotesize\color{muted} #2}\\
+  {\footnotesize\color{accentblue}\bfseries #3}%
+  \vspace{8.05pt}\\
+}
+
+% Skill group in sidebar
+\newcommand{\skillgroup}[2]{%
+  {\small\bfseries #1}\\
+  {\footnotesize\color{muted} #2}%
+  \vspace{5.75pt}\\
+}
+
+% Sports/arts item in sidebar
+\newcommand{\sportitem}[2]{%
+  {\small\bfseries #1}\\
+  {\footnotesize\color{muted} #2}%
+  \vspace{5.75pt}\\
+}
+
+% ────────────────────────────────────────────────────────────────────────────
 \begin{document}
-{\large\bfseries\color{accent} <<name>>}\\[2pt]
-<<role>> \textbar\ <<track>> \textbar\ <<email>> \textbar\ <<phone>> \textbar\ <<location>>\\
-Cognizant ID: <<cognizantId>>
 
-\vspace{0.5em}
-\noindent\rule{\textwidth}{0.4pt}
+% ════════════════════════════════════════════════════════════════════════════
+% HEADER — full-width navy banner
+% ════════════════════════════════════════════════════════════════════════════
+\noindent
+\colorbox{navydk}{%
+  \begin{minipage}[c][\dimexpr 2.6cm\relax][c]{\dimexpr\paperwidth\relax}%
+    \hspace{0.5cm}
+    % Photo circle
+    \begin{tikzpicture}[baseline=(current bounding box.center)]
+      \draw[color=white!40!navydk, line width=2.3pt] (0,0) circle (0.95cm);
+      \fill[navy] (0,0) circle (0.88cm);
+      % silhouette
+      \fill[white!60!navydk] (0, 0.25cm) circle (0.28cm);
+      \fill[white!60!navydk] (0,-0.22cm) ellipse (0.45cm and 0.28cm);
+      \node[white!70!navydk, font=\fontsize{4.6pt}{5.75pt}\selectfont] at (0,-0.82cm) {YOUR PHOTO};
+    \end{tikzpicture}%
+    \hspace{0.5cm}
+    % Name + role + contact
+    \begin{minipage}[c]{0.75\paperwidth}
+      {\fontsize{23pt}{27.6pt}\selectfont\bfseries\color{white} <<name>>}\\[4.6pt]
+      {\fontsize{10.35pt}{12.65pt}\selectfont\color{subtext}\bfseries <<role>>%
+        \ifx\empty<<track>>\empty\else\enspace\textbar\enspace <<track>>\fi}\\[6.9pt]
+      {\fontsize{9.77pt}{11.5pt}\selectfont\color{subtext}
+        \href{mailto:<<email>>}{<<email>>}\enspace\textbar\enspace
+        <<phone>>\enspace\textbar\enspace
+        <<location>>\enspace\textbar\enspace
+        ID: \textbf{<<cognizantId>>}%
+      }
+    \end{minipage}
+  \end{minipage}%
+}
 
-\section*{Education}
-<<education>>
+\noindent{\color{accentbright}\rule{\paperwidth}{2.88pt}}
 
-\section*{Technical Skills}
-<<technicalSkills>>
+\vspace{0pt}
 
-\section*{Capstone Project}
-<<capstone>>
+% ════════════════════════════════════════════════════════════════════════════
+% BODY — sidebar (30%) | main (70%)
+% ════════════════════════════════════════════════════════════════════════════
+\noindent
+% ── SIDEBAR ─────────────────────────────────────────────────────────────────
+\begin{minipage}[t]{0.295\paperwidth}
+  \vspace{9.2pt}
+  \hspace{9.2pt}
+  \begin{minipage}[t]{\dimexpr 0.295\paperwidth - 18.4pt\relax}
 
-\section*{Achievements}
-\begin{itemize}[leftmargin=*]
-<<achievements>>
-\end{itemize}
+    % EDUCATION
+    \sbsec{Education}
+    <<education>>
 
-\section*{Volunteering}
-\begin{itemize}[leftmargin=*]
-<<volunteering>>
-\end{itemize}
+    % TECHNICAL SKILLS
+    \sbsec{Technical Skills}
+    <<technicalSkills>>
 
-\section*{Sports, Arts \& Accomplishments}
-\begin{itemize}[leftmargin=*]
-<<sportsArts>>
-\end{itemize}
+    % STRENGTHS
+    \sbsec{Strengths}
+    \begin{sblist}
+      <<strengths>>
+    \end{sblist}
 
-\section*{Strengths}
-\begin{itemize}[leftmargin=*]
-<<strengths>>
-\end{itemize}
+    % SPORTS & ARTS
+    \vspace{6.9pt}
+    \sbsec{Sports \& Arts}
+    <<sportsArts>>
+
+  \end{minipage}
+\end{minipage}%
+%
+% Vertical separator
+\noindent\hspace{0pt}%
+{\color{linecolor}\rule[-0.5\textheight]{0.69pt}{0.9\textheight}}%
+%
+% ── MAIN PANEL ──────────────────────────────────────────────────────────────
+\begin{minipage}[t]{\dimexpr 0.705\paperwidth - 1.15pt\relax}
+  \vspace{9.2pt}
+  \hspace{11.5pt}
+  \begin{minipage}[t]{\dimexpr 0.705\paperwidth - 34.5pt\relax}
+
+    % CAPSTONE PROJECT
+    \mainsec{Capstone Project}
+    <<capstone>>
+
+    \vspace{9.2pt}
+
+    % ACHIEVEMENTS & AWARDS
+    \mainsec{Achievements \& Awards}
+    <<achievements>>
+
+    \vspace{4.6pt}
+
+    % VOLUNTEERING
+    \mainsec{Volunteering}
+    <<volunteering>>
+
+  \end{minipage}
+\end{minipage}
+
 \end{document}

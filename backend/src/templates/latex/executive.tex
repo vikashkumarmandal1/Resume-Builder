@@ -1,46 +1,211 @@
 \documentclass[11pt,a4paper]{article}
 \usepackage[utf8]{inputenc}
-\usepackage[margin=1in]{geometry}
-\usepackage{enumitem}
+\usepackage[T1]{fontenc}
+\usepackage[top=0in, bottom=0.65in, left=0in, right=0in]{geometry}
+\usepackage{xcolor}
 \usepackage{hyperref}
-\pagestyle{empty}
-\begin{document}
-\begin{center}
-{\LARGE\bfseries <<name>>}\\[6pt]
-<<role>> \quad\textbar\quad <<track>>\\[4pt]
-\url{<<email>>} \quad\textbar\quad <<phone>> \quad\textbar\quad <<location>> \quad\textbar\quad ID: <<cognizantId>>
-\end{center}
-\vspace{1em}
+\usepackage{enumitem}
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage{microtype}
+\usepackage{parskip}
+\usepackage{tikz}
+\usepackage{mdframed}
+\usepackage{lmodern}
+\usepackage{calc}
 
-\textbf{Education}\\[2pt]
+% ── Colours ──────────────────────────────────────────────────────────────────
+\definecolor{charcoal}{RGB}{28,28,30}
+\definecolor{charcoal2}{RGB}{45,45,47}
+\definecolor{gold}{RGB}{184,150,62}
+\definecolor{goldlt}{RGB}{245,237,216}
+\definecolor{goldmd}{RGB}{223,192,122}
+\definecolor{cream}{RGB}{250,248,244}
+\definecolor{muted}{RGB}{115,115,115}
+\definecolor{linecol}{RGB}{229,224,216}
+
+% ── Hyperref ─────────────────────────────────────────────────────────────────
+\hypersetup{colorlinks=true, urlcolor=gold, hidelinks}
+
+% ── No page numbers ───────────────────────────────────────────────────────────
+\pagestyle{empty}
+
+% ── Section heading: gold dot + Cormorant-style serif title + rule ────────────
+% Usage: \execsec{Title}
+\newcommand{\execsec}[1]{%
+  \vspace{10pt}%
+  \noindent
+  \begin{tikzpicture}[baseline=-2pt]
+    \fill[gold] (0,0) circle (3.2pt);
+  \end{tikzpicture}%
+  \hspace{6pt}%
+  {\fontsize{14pt}{16pt}\selectfont\bfseries\color{charcoal} #1}%
+  \hspace{6pt}%
+  \leaders\hrule height 0.6pt\hfill\kern0pt%
+  \vspace{5pt}%
+  \newline%
+}
+
+% ── Education entry ───────────────────────────────────────────────────────────
+\newcommand{\eduentry}[4]{%
+  % #1 degree, #2 institution+stream, #3 year, #4 pct
+  \noindent\makebox[\linewidth]{%
+    \begin{minipage}[t]{0.72\linewidth}
+      {\small\bfseries\color{charcoal} #1}\\
+      {\footnotesize\color{muted} #2}
+    \end{minipage}%
+    \hfill
+    \begin{minipage}[t]{0.24\linewidth}
+      \raggedleft
+      {\small\bfseries\color{charcoal2} #3}\\
+      {\footnotesize\bfseries\color{gold} #4}
+    \end{minipage}%
+  }%
+  \vspace{4pt}%
+  \noindent{\color{linecol}\rule{\linewidth}{0.5pt}}%
+  \vspace{4pt}\\
+}
+
+% ── Dot-leader row (achievements, sports) ────────────────────────────────────
+\newcommand{\leaderrow}[3]{%
+  % #1 title, #2 sub, #3 date-or-level
+  \noindent\makebox[\linewidth]{%
+    {\small\bfseries\color{charcoal} #1}%
+    \ifx&#2&\else{\small\color{muted} \space— #2}\fi%
+    \leaders\hbox{\footnotesize\color{linecol}.}\hfill\kern0pt%
+    {\small\bfseries\color{gold} #3}%
+  }%
+  \vspace{3pt}%
+  \noindent{\color{linecol}\rule{\linewidth}{0.5pt}}%
+  \vspace{3pt}\\
+}
+
+% ── Volunteering block ────────────────────────────────────────────────────────
+\newcommand{\execvol}[3]{%
+  \noindent\makebox[\linewidth]{%
+    {\small\bfseries\color{charcoal} #1}%
+    \hfill
+    {\small\bfseries\color{gold} #2}%
+  }%
+  \\[-2pt]
+  \ifx&#3&\else{\footnotesize\color{muted} #3}\\\fi%
+  \vspace{2pt}%
+  \noindent{\color{linecol}\rule{\linewidth}{0.5pt}}%
+  \vspace{3pt}\\
+}
+
+% ── List style ────────────────────────────────────────────────────────────────
+\setlist[itemize]{nosep, leftmargin=1.3em, itemsep=2pt, topsep=2pt,
+  label=\textcolor{gold}{\textbullet}}
+
+% ─────────────────────────────────────────────────────────────────────────────
+\begin{document}
+\pagecolor{cream}
+
+% ════════════════════════════════════════════════════════════════════════════
+% HEADER — full-width charcoal band
+% ════════════════════════════════════════════════════════════════════════════
+\noindent
+\colorbox{charcoal}{%
+  \begin{minipage}[c]{\paperwidth}%
+    \vspace{18pt}
+    \hspace{1.1cm}%
+    \begin{minipage}[t]{\dimexpr\paperwidth - 2.2cm\relax}
+      % Name + Cognizant ID on same row
+      \noindent\makebox[\linewidth]{%
+        {\fontsize{26pt}{28pt}\selectfont\bfseries\color{white} <<n>>}%
+        \hfill
+        {\fontsize{9pt}{11pt}\selectfont\color{goldmd} Cognizant ID:\enspace\bfseries <<cognizantId>>}%
+      }
+      \vspace{4pt}
+
+      % Gold gradient rule
+      \noindent
+      \begin{tikzpicture}
+        \shade[left color=gold, right color=goldmd!10] (0,0) rectangle (\linewidth, 1.5pt);
+      \end{tikzpicture}
+
+      \vspace{8pt}
+
+      % Three-column info strip
+      \noindent\makebox[\linewidth]{%
+        % Column 1: Role
+        \begin{minipage}[t]{0.30\linewidth}
+          {\fontsize{7pt}{8pt}\selectfont\bfseries\color{gold}\MakeUppercase{Role}}\\[2pt]
+          {\fontsize{9.5pt}{11pt}\selectfont\color{white!80!charcoal}
+            <<role>>\ifx<<track>>\empty\else{} · <<track>>\fi}
+        \end{minipage}%
+        \hfill
+        % Column 2: Contact
+        \begin{minipage}[t]{0.38\linewidth}
+          {\fontsize{7pt}{8pt}\selectfont\bfseries\color{gold}\MakeUppercase{Contact}}\\[2pt]
+          {\fontsize{9pt}{11pt}\selectfont\color{white!80!charcoal}
+            \href{mailto:<<email>>}{<<email>>} · <<phone>>}
+        \end{minipage}%
+        \hfill
+        % Column 3: Location
+        \begin{minipage}[t]{0.24\linewidth}
+          {\fontsize{7pt}{8pt}\selectfont\bfseries\color{gold}\MakeUppercase{Location}}\\[2pt]
+          {\fontsize{9.5pt}{11pt}\selectfont\color{white!80!charcoal} <<location>>}
+        \end{minipage}%
+      }
+    \end{minipage}
+    \vspace{14pt}
+  \end{minipage}%
+}
+
+% ── BODY (with horizontal padding) ───────────────────────────────────────────
+\hspace{1.0cm}%
+\begin{minipage}[t]{\dimexpr\paperwidth - 2.0cm\relax}
+
+% ── EDUCATION ──────────────────────────────────────────────────────────────
+\execsec{Education}
 <<education>>
 
-\vspace{0.5em}
-\textbf{Technical Skills}\\[2pt]
+% ── TECHNICAL SKILLS ───────────────────────────────────────────────────────
+\execsec{Technical Skills}
+
+\noindent
+\begin{tabularx}{\linewidth}{>{\columncolor{charcoal2}\color{goldmd}\footnotesize\bfseries\scshape}p{2.8cm}X}
 <<technicalSkills>>
+\end{tabularx}
 
-\vspace{0.5em}
-\textbf{Capstone Project}\\[2pt]
+\vspace{6pt}
+
+% ── CAPSTONE PROJECT ───────────────────────────────────────────────────────
+\execsec{Capstone Project}
+
+\begin{mdframed}[
+  linecolor=gold,
+  linewidth=1.5pt,
+  leftline=true, rightline=false, topline=false, bottomline=false,
+  innerleftmargin=10pt, innerrightmargin=8pt,
+  innertopmargin=6pt, innerbottommargin=6pt,
+  backgroundcolor=white
+]
 <<capstone>>
+\end{mdframed}
 
-\vspace{0.5em}
-\textbf{Achievements}
-\begin{itemize}[nosep,leftmargin=*]
+\vspace{6pt}
+
+% ── ACHIEVEMENTS ───────────────────────────────────────────────────────────
+\execsec{Achievements \& Awards}
 <<achievements>>
-\end{itemize}
 
-\textbf{Volunteering}
-\begin{itemize}[nosep,leftmargin=*]
+% ── VOLUNTEERING ───────────────────────────────────────────────────────────
+\execsec{Volunteering}
 <<volunteering>>
-\end{itemize}
 
-\textbf{Sports, Arts \& Accomplishments}
-\begin{itemize}[nosep,leftmargin=*]
+% ── SPORTS, ARTS & ACCOMPLISHMENTS ─────────────────────────────────────────
+\execsec{Sports, Arts \& Accomplishments}
 <<sportsArts>>
-\end{itemize}
 
-\textbf{Strengths}
-\begin{itemize}[nosep,leftmargin=*]
+% ── STRENGTHS ──────────────────────────────────────────────────────────────
+\execsec{Strengths}
+{\small\color{charcoal}
 <<strengths>>
-\end{itemize}
+}
+
+\end{minipage}
+
 \end{document}

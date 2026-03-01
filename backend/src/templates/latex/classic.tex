@@ -1,47 +1,165 @@
 \documentclass[11pt,a4paper]{article}
 \usepackage[utf8]{inputenc}
-\usepackage[margin=1in]{geometry}
-\usepackage{enumitem}
+\usepackage[T1]{fontenc}
+\usepackage[top=0.65in, bottom=0.65in, left=0.70in, right=0.65in]{geometry}
+\usepackage{xcolor}
 \usepackage{hyperref}
-\title{Dossier — \textbf{<<name>>}}
-\author{}
-\date{}
-\begin{document}
-\maketitle
-\section*{Profile}
-\textbf{Name:} <<name>> \\
-\textbf{Email:} \url{<<email>>} \\
-\textbf{Phone:} <<phone>> \\
-\textbf{Location:} <<location>> \\
-\textbf{Cognizant ID:} <<cognizantId>> \\
-\textbf{Role/Track:} <<role>> / <<track>>
+\usepackage{enumitem}
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage{microtype}
+\usepackage{parskip}
+\usepackage{mdframed}
+\usepackage{tikz}
+\usepackage{lmodern}
 
-\section*{Education}
+% ── Colours ──────────────────────────────────────────────────────────────────
+\definecolor{emerald}{RGB}{5, 150, 105}
+\definecolor{emlt}{RGB}{209, 250, 229}
+\definecolor{emmd}{RGB}{110, 231, 183}
+\definecolor{slate}{RGB}{30, 41, 59}
+\definecolor{slatemd}{RGB}{51, 65, 85}
+\definecolor{muted}{RGB}{100, 116, 139}
+\definecolor{line}{RGB}{226, 232, 240}
+\definecolor{cream}{RGB}{248, 250, 252}
+
+% ── Hyperref ─────────────────────────────────────────────────────────────────
+\hypersetup{colorlinks=true, urlcolor=emerald, hidelinks}
+
+% ── No page numbers ───────────────────────────────────────────────────────────
+\pagestyle{empty}
+
+% ── Left-bar section heading ──────────────────────────────────────────────────
+% Usage: \classsec{Title}
+\newcommand{\classsec}[1]{%
+  \vspace{10pt}%
+  \noindent
+  \begin{tikzpicture}[baseline=(t.base)]
+    \fill[emerald] (0,-0.05) rectangle (0.18, 0.72);
+    \node[anchor=west, inner sep=0pt] (t) at (0.26,0.32)
+      {\fontsize{8pt}{9pt}\selectfont\bfseries\color{slatemd}\MakeUppercase{#1}};
+  \end{tikzpicture}%
+  \vspace{4pt}%
+  \newline%
+}
+
+% ── Education row: degree | institution | year | pct ─────────────────────────
+\newcommand{\edurow}[4]{%
+  \noindent\makebox[\linewidth]{%
+    \begin{minipage}[t]{0.72\linewidth}
+      {\small\bfseries\color{slate} #1}\\
+      {\footnotesize\color{muted} #2}
+    \end{minipage}%
+    \hfill
+    \begin{minipage}[t]{0.24\linewidth}
+      \raggedleft
+      {\small\bfseries\color{slatemd} #3}\\
+      {\footnotesize\bfseries\color{emerald} #4}
+    \end{minipage}%
+  }%
+  \vspace{4pt}%
+  \noindent{\color{line}\rule{\linewidth}{0.4pt}}%
+  \vspace{4pt}\\
+}
+
+% ── Skill block: category + items ────────────────────────────────────────────
+\newcommand{\skillblock}[2]{%
+  {\fontsize{8.5pt}{10pt}\selectfont\bfseries\color{muted}\MakeUppercase{#1}}\\[3pt]
+  {\small #2}%
+  \vspace{6pt}\\
+}
+
+% ── Achievement / list row with right-flush date ─────────────────────────────
+\newcommand{\listrow}[3]{%
+  % #1 title, #2 description, #3 date
+  \noindent\makebox[\linewidth]{%
+    {\small\bfseries\color{slate} #1}%
+    \ifx&#2&\else{\small\color{muted} \space— #2}\fi%
+    \hfill
+    {\small\bfseries\color{emerald} #3}%
+  }%
+  \vspace{3pt}%
+  \noindent{\color{line}\rule{\linewidth}{0.4pt}}%
+  \vspace{3pt}\\
+}
+
+% ── Volunteering block ───────────────────────────────────────────────────────
+\newcommand{\volblock}[3]{%
+  \noindent\makebox[\linewidth]{%
+    {\small\bfseries\color{slate} #1}%
+    \hfill
+    {\small\color{emerald} #2}%
+  }%
+  \\[-2pt]
+  \ifx&#3&\else{\footnotesize\color{muted} #3}\\\fi%
+  \vspace{2pt}%
+  \noindent{\color{line}\rule{\linewidth}{0.4pt}}%
+  \vspace{3pt}\\
+}
+
+% ── List style ────────────────────────────────────────────────────────────────
+\setlist[itemize]{nosep, leftmargin=1.2em, itemsep=2pt, topsep=2pt,
+  label=\textcolor{emerald}{\textbullet}}
+
+% ─────────────────────────────────────────────────────────────────────────────
+\begin{document}
+
+% ── HEADER ───────────────────────────────────────────────────────────────────
+\noindent
+\begin{tikzpicture}[remember picture, overlay]
+  % left green bar spanning entire header height (approx)
+  \fill[emerald] (0, 0) rectangle (0.18, -2.6cm);
+\end{tikzpicture}%
+\hspace{0.32cm}%
+\begin{minipage}[t]{\dimexpr\linewidth - 0.32cm\relax}
+  {\fontsize{28pt}{30pt}\selectfont\bfseries\color{slate} <<n>>}\\[4pt]
+  {\fontsize{11pt}{13pt}\selectfont\bfseries\color{emerald} <<role>>\ifx<<track>>\empty\else\enspace·\enspace <<track>>\fi}\\[6pt]
+  {\fontsize{9.5pt}{11pt}\selectfont\color{muted}
+    \texttt{<<email>>}\enspace
+    \textbar\enspace <<phone>>\enspace
+    \textbar\enspace <<location>>\enspace
+    \textbar\enspace CTS ID: \textbf{<<cognizantId>>}%
+  }
+\end{minipage}
+
+\vspace{6pt}
+\noindent{\color{emerald}\rule{\linewidth}{2pt}}
+\vspace{8pt}
+
+% ── EDUCATION ────────────────────────────────────────────────────────────────
+\classsec{Education}
 <<education>>
 
-\section*{Technical Skills}
-<<technicalSkills>>
+% ── TECHNICAL SKILLS ─────────────────────────────────────────────────────────
+\classsec{Technical Skills}
+\begin{minipage}[t]{0.48\linewidth}
+<<technicalSkillsLeft>>
+\end{minipage}%
+\hfill
+\begin{minipage}[t]{0.48\linewidth}
+<<technicalSkillsRight>>
+\end{minipage}
 
-\section*{Capstone Project}
+\vspace{4pt}
+
+% ── CAPSTONE PROJECT ─────────────────────────────────────────────────────────
+\classsec{Capstone Project}
 <<capstone>>
 
-\section*{Achievements}
-\begin{itemize}
+% ── ACHIEVEMENTS ─────────────────────────────────────────────────────────────
+\classsec{Achievements \& Awards}
 <<achievements>>
-\end{itemize}
 
-\section*{Volunteering}
-\begin{itemize}
+% ── VOLUNTEERING ─────────────────────────────────────────────────────────────
+\classsec{Volunteering}
 <<volunteering>>
-\end{itemize}
 
-\section*{Sports, Arts \& Accomplishments}
-\begin{itemize}
+% ── SPORTS, ARTS & ACCOMPLISHMENTS ───────────────────────────────────────────
+\classsec{Sports, Arts \& Accomplishments}
 <<sportsArts>>
-\end{itemize}
 
-\section*{Skills \& Strengths}
-\begin{itemize}
+% ── STRENGTHS ────────────────────────────────────────────────────────────────
+\classsec{Strengths}
 <<strengths>>
-\end{itemize}
+
 \end{document}
