@@ -67,6 +67,7 @@ const dossierSchema = new mongoose.Schema(
       track: String,
       linkedIn: String,
       github: String,
+      photoUrl: String,
     },
     education: [educationSchema],
     technicalSkills: [skillGroupSchema],

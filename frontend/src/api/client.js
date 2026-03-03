@@ -11,6 +11,13 @@ function headers(includeAuth = true) {
   return h;
 }
 
+function authOnlyHeaders() {
+  const token = getStoredToken();
+  const h = {};
+  if (token) h.Authorization = `Bearer ${token}`;
+  return h;
+}
+
 export async function login(email, password) {
   const res = await fetch(`${API}/auth/login`, {
     method: 'POST',
@@ -123,4 +130,38 @@ export async function downloadPdf(id, template, filename = 'dossier.pdf') {
 
 export function getShareUrl(shareId) {
   return `${window.location.origin}/p/${shareId}`;
+}
+
+export async function uploadProfilePhoto(dossierId, file) {
+  const formData = new FormData();
+  formData.append('photo', file);
+  formData.append('dossierId', dossierId);
+
+  const res = await fetch(`${API}/upload/profile-photo`, {
+    method: 'POST',
+    headers: authOnlyHeaders(),
+    body: formData,
+  });
+  console.log("Upload response:", res);
+
+  if (!res.ok) {
+    const error = await res.json().catch(() => ({}));
+    throw new Error(error.error || 'Upload failed');
+  }
+
+  return res.json();
+}
+
+export async function deleteProfilePhoto(dossierId) {
+  const res = await fetch(`${API}/upload/profile-photo/${dossierId}`, {
+    method: 'DELETE',
+    headers: authOnlyHeaders(),
+  });
+
+  if (!res.ok) {
+    const error = await res.json().catch(() => ({}));
+    throw new Error(error.error || 'Delete failed');
+  }
+
+  return res.json();
 }

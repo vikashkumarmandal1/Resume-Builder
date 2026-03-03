@@ -268,6 +268,7 @@ export default function Builder() {
                 data={data}
                 update={update}
                 save={save}
+                dossierId={savedId}
                 loading={loading}
                 savedId={savedId}
                 shareId={shareId}

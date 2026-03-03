@@ -72,7 +72,7 @@ export default function Profile() {
           <div className="p-6">
             {dossier ? (
               <div className="flex flex-col sm:flex-row gap-6">
-                <div className="shrink-0 flex justify-center sm:justify-start">
+                {/* <div className="shrink-0 flex justify-center sm:justify-start">
                   <div className="w-24 h-24 rounded-xl bg-slate-100 dark:bg-slate-700 border-2 border-slate-200 dark:border-slate-600 flex items-center justify-center">
                     <span className="text-2xl font-semibold text-slate-400 dark:text-slate-500">
                       {(() => {
@@ -82,7 +82,30 @@ export default function Profile() {
                       })()}
                     </span>
                   </div>
-                </div>
+                </div> */}
+
+<div className="shrink-0 flex justify-center sm:justify-start">
+  <div className="w-24 h-24 rounded-xl bg-slate-100 dark:bg-slate-700 border-2 border-slate-200 dark:border-slate-600 flex items-center justify-center overflow-hidden">
+    {/* Check karein ki photoUrl hai ya nahi */}
+    {p.photoUrl || user?.photoUrl ? (
+      <img 
+        src={p.photoUrl || user?.photoUrl} 
+        alt="Profile" 
+        className="w-full h-full object-cover"
+      />
+    ) : (
+      <span className="text-2xl font-semibold text-slate-400 dark:text-slate-500">
+        {(() => {
+          const name = String(p.name || user?.name || user?.email || '?').trim();
+          const initial = name.charAt(0).toUpperCase();
+          return initial || '?';
+        })()}
+      </span>
+    )}
+  </div>
+</div>
+
+
                 <div className="flex-1 grid sm:grid-cols-2 gap-4 min-w-0">
                   <div className="sm:col-span-2">
                     <p className="text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">Name</p>

@@ -154,7 +154,14 @@ export default function PortfolioMinimal({ dossier }) {
             </div>
           </div>
 
-          <div className="flex justify-end">
+          <div className="flex flex-col items-center justify-center gap-6">
+            {p.photoUrl && (
+              <img
+                src={p.photoUrl}
+                alt={p.name}
+                className="w-40 h-40 sm:w-48 sm:h-48 rounded-2xl object-cover shadow-xl border border-gray-700"
+              />
+            )}
             <button
               type="button"
               onClick={() => scrollTo('projects')}

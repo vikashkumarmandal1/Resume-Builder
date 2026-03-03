@@ -198,12 +198,20 @@ export default function DeveloperDark({ dossier }) {
             {name.toUpperCase()}
           </div>
 
-          {/* center “photo” replacement (clean + no external dependency) */}
+          {/* center "photo" replacement (clean + no external dependency) */}
           <div className="absolute inset-y-0 left-1/2 -translate-x-1/2 z-[2] w-[min(520px,70vw)] flex items-end justify-center pointer-events-none select-none">
             <div className="w-full h-[92%] rounded-[260px_260px_0_0] bg-gradient-to-b from-[#2d3d1a] to-[#1a2510] flex items-center justify-center shadow-[0_30px_80px_rgba(0,0,0,0.25)]">
-              <div className="w-28 h-28 rounded-full bg-[rgba(13,26,13,0.9)] flex items-center justify-center text-[#c9f542] text-3xl font-semibold">
-                {initials(name)}
-              </div>
+              {p.photoUrl ? (
+                <img
+                  src={p.photoUrl}
+                  alt={name}
+                  className="w-full h-full rounded-[260px_260px_0_0] object-cover"
+                />
+              ) : (
+                <div className="w-28 h-28 rounded-full bg-[rgba(13,26,13,0.9)] flex items-center justify-center text-[#c9f542] text-3xl font-semibold">
+                  {initials(name)}
+                </div>
+              )}
             </div>
           </div>
 

@@ -6,6 +6,7 @@ import dossierRoutes from './routes/dossier.js';
 import templateRoutes from './routes/templates.js';
 import exportRoutes from './routes/export.js';
 import authRoutes from './routes/auth.js';
+import uploadRoutes from './routes/upload.js';
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -17,6 +18,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/dossiers', dossierRoutes);
 app.use('/api/templates', templateRoutes);
 app.use('/api/export', exportRoutes);
+app.use('/api/upload', uploadRoutes);
 
 app.get('/api/health', (req, res) => res.json({ ok: true }));
 

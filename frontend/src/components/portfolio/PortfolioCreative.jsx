@@ -143,9 +143,17 @@ export default function PortfolioCreative({ dossier }) {
             )}
           </p>
           <div className="mt-10 flex justify-center">
-            <div className="w-52 h-52 rounded-full bg-lime-300 flex items-center justify-center shadow-2xl text-slate-900 font-display font-semibold text-xl uppercase tracking-wide">
-              {primarySkills.length > 0 ? 'Tech Stack' : 'Profile'}
-            </div>
+            {p.photoUrl ? (
+              <img
+                src={p.photoUrl}
+                alt={p.name}
+                className="w-52 h-52 rounded-full object-cover shadow-2xl border-4 border-slate-900"
+              />
+            ) : (
+              <div className="w-52 h-52 rounded-full bg-lime-300 flex items-center justify-center shadow-2xl text-slate-900 font-display font-semibold text-xl uppercase tracking-wide">
+                {primarySkills.length > 0 ? 'Tech Stack' : 'Profile'}
+              </div>
+            )}
           </div>
         </section>
 
