@@ -1,3 +1,4 @@
+import { Trash2 } from 'lucide-react';
 function TagList({ items, onChange, placeholder }) {
   const add = () => onChange([...(items || []), '']);
   const set = (i, v) => {
@@ -18,8 +19,13 @@ function TagList({ items, onChange, placeholder }) {
             placeholder={placeholder}
             className="flex-1 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder-slate-500 dark:placeholder-slate-400 px-3 py-2"
           />
-          <button type="button" onClick={() => remove(i)} className="text-red-600 dark:text-red-400 px-2 hover:underline">
-            ×
+          <button
+            type="button"
+            onClick={() => remove(i)}
+            className="text-red-600 dark:text-red-400 px-2 hover:scale-110 transition-transform"
+            aria-label="Delete item"
+          >
+            <Trash2 size={18} strokeWidth={2} />
           </button>
         </div>
       ))}

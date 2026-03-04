@@ -1,3 +1,4 @@
+import { Trash2 } from 'lucide-react';
 export default function StepStrengths({ data, update }) {
   const list = data.strengths || [];
 
@@ -17,6 +18,7 @@ export default function StepStrengths({ data, update }) {
         <div key={i} className="p-4 rounded-xl border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 flex gap-3">
           <input
             type="text"
+            required
             placeholder="Strength name"
             value={item.name || ''}
             onChange={(e) => change(i, 'name', e.target.value)}
@@ -24,13 +26,19 @@ export default function StepStrengths({ data, update }) {
           />
           <input
             type="text"
+            required
             placeholder="Brief description"
             value={item.description || ''}
             onChange={(e) => change(i, 'description', e.target.value)}
             className="flex-1 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder-slate-500 dark:placeholder-slate-400 px-3 py-2"
           />
-          <button type="button" onClick={() => remove(i)} className="text-red-600 dark:text-red-400 px-2 hover:underline shrink-0">
-            ×
+          <button
+            type="button"
+            onClick={() => remove(i)}
+            className="text-red-600 dark:text-red-400 p-1 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-md transition-colors shrink-0"
+            aria-label="Delete"
+          >
+            <Trash2 size={16} strokeWidth={2.5} />
           </button>
         </div>
       ))}

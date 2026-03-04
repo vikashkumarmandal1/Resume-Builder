@@ -26,17 +26,17 @@ export default function Login() {
     }
   };
 
-  const handleGoogleLogin = () => {
-    window.alert('Google sign-in will be available soon.');
-  };
+  // const handleGoogleLogin = () => {
+  //   window.alert('Google sign-in will be available soon.');
+  // };
 
   return (
     <div className="min-h-[70vh] flex items-center justify-center px-4">
-      <div className="w-full max-w-md flex flex-col items-center">
+      <div className="w-full max-w-md flex flex-col items-center mt-10 border border-slate-200 dark:border-slate-700 rounded-xl bg-white dark:bg-slate-800 p-8 shadow">
         <h1 className="font-display text-2xl font-bold text-slate-900 dark:text-white mb-2 text-center">Log in</h1>
         <p className="text-slate-600 dark:text-slate-400 mb-6 text-center">Use your email and password to access your dossiers.</p>
 
-        <button
+        {/* <button
           type="button"
           onClick={handleGoogleLogin}
           className="w-full flex items-center justify-center gap-3 py-3 rounded-xl border-2 border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-200 font-medium hover:bg-slate-50 dark:hover:bg-slate-800 transition mb-6"
@@ -48,7 +48,7 @@ export default function Login() {
             <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
           </svg>
           Continue with Google
-        </button>
+        </button> */}
 
         <form onSubmit={handleSubmit} className="space-y-4 w-full">
           {error && (

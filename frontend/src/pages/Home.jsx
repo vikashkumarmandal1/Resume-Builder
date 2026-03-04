@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 
 export default function Home() {
+  let isNewUser = false; 
   return (
     <div className="max-w-4xl mx-auto px-4 py-16">
       <div className="text-center mb-14">
@@ -12,31 +13,36 @@ export default function Home() {
           Choose a resume template, enable a web portfolio, and share one link.
         </p>
       </div>
-      <div className="grid md:grid-cols-2 gap-6">
-        <Link
-          to="/build"
-          className="block p-8 rounded-2xl bg-white dark:bg-slate-800 border-2 border-slate-200 dark:border-slate-700 hover:border-primary-500 dark:hover:border-primary-500 hover:shadow-xl transition-all text-left group"
-        >
-          <span className="text-3xl mb-3 block">📄</span>
-          <h2 className="font-display text-xl font-semibold text-slate-900 dark:text-white group-hover:text-primary-600 dark:group-hover:text-primary-400">
-            Create New Dossier
-          </h2>
-          <p className="text-slate-600 dark:text-slate-300 mt-2">
-            Fill in your details, pick a resume and web template, then export LaTeX or share your portfolio link.
-          </p>
-        </Link>
-        <a
-          href="#features"
-          className="block p-8 rounded-2xl bg-white dark:bg-slate-800 border-2 border-slate-200 dark:border-slate-700 hover:border-accent-500 dark:hover:border-accent-500 hover:shadow-xl transition-all text-left group"
-        >
-          <span className="text-3xl mb-3 block">✨</span>
-          <h2 className="font-display text-xl font-semibold text-slate-900 dark:text-white group-hover:text-accent-600 dark:group-hover:text-accent-400">
-            Features
-          </h2>
-          <p className="text-slate-600 dark:text-slate-300 mt-2">
-            Candidate profile, technical skills, capstone summary, achievements, volunteering, sports/arts, strengths.
-          </p>
-        </a>
+      <div className="grid md:grid-cols-1 gap-6 max-w-md mx-auto">
+        {isNewUser ? (
+          /* --- CREATE CARD --- */
+          <Link
+            to="/build"
+            className="block p-8 rounded-2xl bg-white dark:bg-slate-800 border-2 border-slate-200 dark:border-slate-700 hover:border-primary-500 dark:hover:border-primary-500 hover:shadow-xl transition-all text-left group"
+          >
+            <span className="text-3xl mb-3 block">📄</span>
+            <h2 className="font-display text-xl font-semibold text-slate-900 dark:text-white group-hover:text-primary-600 dark:group-hover:text-primary-400">
+              Create New Dossier
+            </h2>
+            <p className="text-slate-600 dark:text-slate-300 mt-2">
+              Fill in your details, pick a resume and web template, then export LaTeX or share your portfolio link.
+            </p>
+          </Link>
+        ) : (
+          /* --- EDIT CARD --- */
+          <Link
+            to="/build"
+            className="block p-8 rounded-2xl bg-white dark:bg-slate-800 border-2 border-slate-200 dark:border-slate-700 hover:border-primary-500 dark:hover:border-primary-500 hover:shadow-xl transition-all text-left group"
+          >
+            <span className="text-3xl mb-3 block">📝</span> {/* Changed emoji to differentiate */}
+            <h2 className="font-display text-xl font-semibold text-slate-900 dark:text-white group-hover:text-primary-600 dark:group-hover:text-primary-400">
+              Edit Existing Dossier
+            </h2>
+            <p className="text-slate-600 dark:text-slate-300 mt-2">
+              Update your current information, change your templates, or re-export your documents.
+            </p>
+          </Link>
+        )}
       </div>
       <div id="features" className="mt-20 pt-12 border-t border-slate-200 dark:border-slate-700">
         <h2 className="font-display text-2xl font-semibold text-slate-900 dark:text-white mb-6">What you get</h2>
@@ -47,6 +53,8 @@ export default function Home() {
           <li className="flex items-center gap-2">✓ One shareable link for your portfolio</li>
         </ul>
       </div>
+
+
     </div>
   );
 }
