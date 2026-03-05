@@ -1,7 +1,31 @@
 import { Link } from 'react-router-dom';
 
 export default function Home() {
-  let isNewUser = false; 
+
+ const userString = localStorage.getItem('genc_dossier_user');
+  console.log('User string from localStorage:', userString)
+// Initialize a default value
+let isNewUser = true; 
+
+if (userString) {
+    // 2. Parse the string into an object
+    const user = JSON.parse(userString);
+    const userEmail = user.email; 
+
+    // 3. Access the profile using the exact key format seen in your logs
+    const profileDataRaw = localStorage.getItem(`genc_dossier_profile_${userEmail}`);
+    
+    if (profileDataRaw) {
+        const fullData = JSON.parse(profileDataRaw);
+
+        // 4. Check the cognizantId
+        const cogId = fullData.profile?.cognizantId;
+
+        // Logic: If ID exists and is NOT empty, isNewUser is false (they are an existing user)
+        isNewUser = !(cogId && cogId.trim() !== "");
+    }
+}
+
   return (
     <div className="max-w-4xl mx-auto px-4 py-16">
       <div className="text-center mb-14">
