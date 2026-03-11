@@ -71,7 +71,8 @@ const dossierSchema = new mongoose.Schema(
     },
     education: [educationSchema],
     technicalSkills: [skillGroupSchema],
-    capstoneProject: projectSchema,
+    capstoneProject: projectSchema, // keep for backward compatibility if needed, but we'll use projects
+    projects: [projectSchema],
     achievements: [achievementSchema],
     volunteering: [volunteeringSchema],
     sportsArts: [sportArtSchema],

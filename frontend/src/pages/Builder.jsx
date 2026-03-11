@@ -389,121 +389,182 @@ export default function Builder() {
   const currentPortfolio = portfolios.find((p) => p.template === currentTemplateSlug) || null;
 
   return (
-    <div className="min-h-[80vh] bg-slate-50 dark:bg-slate-900/50">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 py-8 sm:py-10">
-        {/* Header */}
-        <header className="mb-8 sm:mb-10">
-          <h1 className="font-display text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white tracking-tight">
-            Build your dossier
-          </h1>
-          <p className="mt-2 text-slate-600 dark:text-slate-400 text-sm sm:text-base">
-            Complete each section and choose a template to export PDF or share your portfolio.
-          </p>
-          {/* Step progress bar */}
-          <div className="mt-6 h-1.5 rounded-full bg-slate-200 dark:bg-slate-700 overflow-hidden">
-            <div
-              className="h-full rounded-full bg-primary-600 transition-all duration-300"
-              style={{ width: `${((step + 1) / STEPS.length) * 100}%` }}
-            />
-          </div>
-        </header>
-
-        {/* Step pills - horizontal scroll on small screens */}
-        <div className="flex gap-2 overflow-x-auto pb-6 mb-6 scrollbar-thin scrollbar-thumb-slate-300 dark:scrollbar-thumb-slate-600">
-          {STEPS.map((s, i) => {
-            const Icon = STEP_ICONS[s.id];
-            const isActive = step === i;
-            const isPast = step > i;
-            return (
-              <button
-                key={s.id}
-                type="button"
-                onClick={() => {
-                  if (i > step) {
-                    const ok = validateStep(step);
-                    if (!ok) return;
-                  }
-                  setStep(i);
-                }}
-                className={`shrink-0 flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 border ${
-                  isActive
-                    ? 'bg-primary-600 text-white border-primary-600 shadow-md'
-                    : isPast
-                    ? 'bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-600 text-slate-700 dark:text-slate-300'
-                    : 'bg-white dark:bg-slate-800/80 border-slate-200 dark:border-slate-700 text-slate-500 dark:text-slate-400 hover:border-primary-400 hover:text-primary-600 dark:hover:text-primary-400'
-                }`}
-              >
-                {Icon && Icon('w-4 h-4 shrink-0')}
-                <span className="hidden sm:inline">{s.title}</span>
-                <span className="sm:hidden">{s.title.split(' ')[0]}</span>
-              </button>
-            );
-          })}
-        </div>
-
-        {/* Content card */}
-        <div className="rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800/80 shadow-sm overflow-hidden">
-          {error && (
-            <div className="mx-6 mt-6 p-4 rounded-xl bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-300 text-sm">
-              {error}
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-900/50">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+        <div className="flex flex-col lg:flex-row gap-8 lg:items-start">
+          
+          {/* Sidebar Navigation - Desktop */}
+          <aside className="hidden lg:block w-72 shrink-0 sticky top-24">
+            <div className="bg-white dark:bg-slate-800 rounded-3xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden p-4">
+              <div className="mb-6 px-4 pt-2">
+                <h2 className="text-xs font-bold text-slate-400 uppercase tracking-widest">Builder Steps</h2>
+                <div className="mt-4 flex items-center gap-3">
+                  <div className="flex-1 h-1.5 rounded-full bg-slate-100 dark:bg-slate-700 overflow-hidden">
+                    <div 
+                      className="h-full bg-primary-600 transition-all duration-500 ease-out"
+                      style={{ width: `${((step + 1) / STEPS.length) * 100}%` }}
+                    />
+                  </div>
+                  <span className="text-xs font-bold text-primary-600 dark:text-primary-400">
+                    {Math.round(((step + 1) / STEPS.length) * 100)}%
+                  </span>
+                </div>
+              </div>
+              
+              <nav className="space-y-1">
+                {STEPS.map((s, i) => {
+                  const Icon = STEP_ICONS[s.id];
+                  const isActive = step === i;
+                  const isPast = step > i;
+                  return (
+                    <button
+                      key={s.id}
+                      onClick={() => {
+                        if (i > step) {
+                          const ok = validateStep(step);
+                          if (!ok) return;
+                        }
+                        setStep(i);
+                      }}
+                      className={`w-full flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-semibold transition-all duration-200 group ${
+                        isActive 
+                          ? 'bg-primary-600 text-white shadow-lg shadow-primary-200 dark:shadow-none' 
+                          : isPast
+                          ? 'text-slate-900 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700'
+                          : 'text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800'
+                      }`}
+                    >
+                      <div className={`w-8 h-8 rounded-xl flex items-center justify-center transition-colors ${
+                        isActive ? 'bg-white/20' : isPast ? 'bg-primary-50 dark:bg-primary-900/20 text-primary-600 dark:text-primary-400' : 'bg-slate-100 dark:bg-slate-800'
+                      }`}>
+                        {Icon && Icon('w-4 h-4')}
+                      </div>
+                      <span className="flex-1 text-left">{s.title}</span>
+                      {isPast && !isActive && (
+                        <svg className="w-4 h-4 text-primary-500" fill="currentColor" viewBox="0 0 20 20">
+                          <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                        </svg>
+                      )}
+                    </button>
+                  );
+                })}
+              </nav>
             </div>
-          )}
+          </aside>
 
-          <div className="p-6 sm:p-8">
-            {StepComponent && (
-              <StepComponent
-                data={data}
-                update={update}
-                save={save}
-                dossierId={savedId}
-                setSavedId={setSavedId}
-                loading={loading}
-                savedId={savedId}
-                shareId={shareId}
-                portfolioId={currentPortfolio?.id}
-                portfolioTemplate={currentTemplateSlug}
-                resumeTemplates={resumeTemplates}
-                webTemplates={webTemplates}
-                validationErrors={validationErrors}
-                onNext={() => {
-                  const ok = validateStep(step);
-                  if (ok) {
-                    setStep((s) => Math.min(s + 1, STEPS.length - 1));
-                  }
-                }}
-                onPrev={() => setStep((s) => Math.max(s - 1, 0))}
-                isFirst={step === 0}
-                isLast={step === STEPS.length - 1}
-                onValidateAll={validateAllRequiredSections}
-              />
-            )}
+          {/* Main Content Area */}
+          <div className="flex-1 min-w-0 max-w-4xl">
+            {/* Header - Mobile Only */}
+            <header className="mb-8 lg:hidden">
+              <h1 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">Build your dossier</h1>
+              <div className="flex items-center gap-2 overflow-x-auto pb-4 scrollbar-hide">
+                {STEPS.map((s, i) => (
+                  <button
+                    key={s.id}
+                    onClick={() => {
+                      if (i > step) {
+                        const ok = validateStep(step);
+                        if (!ok) return;
+                      }
+                      setStep(i);
+                    }}
+                    className={`shrink-0 w-10 h-10 rounded-xl flex items-center justify-center transition-all ${
+                      step === i ? 'bg-primary-600 text-white shadow-lg shadow-primary-200' : 'bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-400'
+                    }`}
+                  >
+                    {STEP_ICONS[s.id] && STEP_ICONS[s.id]('w-5 h-5')}
+                  </button>
+                ))}
+              </div>
+            </header>
+
+            <div className="bg-white dark:bg-slate-800 rounded-[2rem] border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden min-h-[60vh] flex flex-col">
+              {error && (
+                <div className="m-6 p-4 rounded-2xl bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-300 text-sm flex items-center gap-3">
+                  <svg className="w-5 h-5 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" /></svg>
+                  {error}
+                </div>
+              )}
+
+              <div className="p-6 sm:p-10 flex-1">
+                <div className="mb-8 flex items-center justify-between">
+                   <div>
+                     <h2 className="text-2xl font-bold text-slate-900 dark:text-white">{currentStep.title}</h2>
+                     <p className="text-slate-500 dark:text-slate-400 text-sm mt-1">Section {step + 1} of {STEPS.length}</p>
+                   </div>
+                   <div className="hidden sm:block">
+                      <div className="text-right">
+                        <div className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">Dossier Status</div>
+                        <div className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${savedId ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400' : 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400'}`}>
+                          {savedId ? 'Synced to Cloud' : 'Draft Only'}
+                        </div>
+                      </div>
+                   </div>
+                </div>
+
+                {StepComponent && (
+                  <StepComponent
+                    data={data}
+                    update={update}
+                    save={save}
+                    dossierId={savedId}
+                    setSavedId={setSavedId}
+                    loading={loading}
+                    savedId={savedId}
+                    shareId={shareId}
+                    portfolioId={currentPortfolio?.id}
+                    portfolioTemplate={currentTemplateSlug}
+                    resumeTemplates={resumeTemplates}
+                    webTemplates={webTemplates}
+                    validationErrors={validationErrors}
+                    onNext={() => {
+                      const ok = validateStep(step);
+                      if (ok) {
+                        setStep((s) => Math.min(s + 1, STEPS.length - 1));
+                      }
+                    }}
+                    onPrev={() => setStep((s) => Math.max(s - 1, 0))}
+                    isFirst={step === 0}
+                    isLast={step === STEPS.length - 1}
+                    onValidateAll={validateAllRequiredSections}
+                  />
+                )}
+              </div>
+
+              {/* Navigation Footer */}
+              <div className="px-6 sm:px-10 py-6 bg-slate-50 dark:bg-slate-800/50 border-t border-slate-100 dark:border-slate-700 flex items-center justify-between gap-4">
+                <button
+                  type="button"
+                  onClick={() => setStep((s) => Math.max(s - 1, 0))}
+                  disabled={step === 0}
+                  className="flex items-center gap-2 px-6 py-3 rounded-2xl text-slate-600 dark:text-slate-300 font-bold hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors disabled:opacity-0"
+                >
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
+                  Back
+                </button>
+                
+                <div className="flex items-center gap-3">
+                  {step < STEPS.length - 1 ? (
+                    <button
+                      type="button"
+                      onClick={async () => {
+                        const valid = validateStep(step);
+                        if (!valid) return;
+                        const ok = await save();
+                        if (ok) setStep((s) => Math.min(s + 1, STEPS.length - 1));
+                      }}
+                      disabled={loading}
+                      className="group flex items-center gap-2 px-8 py-3 rounded-2xl bg-primary-600 text-white font-bold hover:bg-primary-700 shadow-xl shadow-primary-200 dark:shadow-none transition-all hover:scale-105 active:scale-95 disabled:opacity-50"
+                    >
+                      {loading ? 'Saving...' : 'Save & Continue'}
+                      {!loading && <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>}
+                    </button>
+                  ) : null}
+                </div>
+              </div>
+            </div>
           </div>
 
-          {step < STEPS.length - 1 && (
-            <div className="px-6 sm:px-8 py-4 border-t border-slate-100 dark:border-slate-700 flex justify-between gap-4">
-              <button
-                type="button"
-                onClick={() => setStep((s) => Math.max(s - 1, 0))}
-                disabled={step === 0}
-                className="px-5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-200 bg-white dark:bg-slate-800 disabled:opacity-50 text-sm font-medium hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors"
-              >
-                Previous
-              </button>
-              <button
-                type="button"
-                onClick={async () => {
-                  const valid = validateStep(step);
-                  if (!valid) return;
-                  const ok = await save();
-                  if (ok) setStep((s) => Math.min(s + 1, STEPS.length - 1));
-                }}
-                disabled={loading}
-                className="px-5 py-2.5 rounded-xl bg-primary-600 text-white text-sm font-medium hover:bg-primary-500 shadow-sm transition-colors disabled:opacity-50"
-              >
-                {loading ? 'Saving…' : 'Save & Next'}
-              </button>
-            </div>
-          )}
         </div>
       </div>
     </div>

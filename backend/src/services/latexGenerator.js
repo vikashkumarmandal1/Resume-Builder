@@ -44,14 +44,61 @@ function skillsByCategory(skills) {
 }
 
 function projectBlock(proj) {
-  if (!proj) return '';
+  if (!proj || !proj.title) return '';
   const lines = [];
-  if (proj.title) lines.push(`\\textbf{${escapeLatex(proj.title)}}`);
-  if (proj.techStack?.length) lines.push(`Tech: ${proj.techStack.map(escapeLatex).join(', ')}`);
-  if (proj.role) lines.push(`Role: ${escapeLatex(proj.role)}`);
+  lines.push(`\\textbf{${escapeLatex(proj.title)}}`);
+  if (proj.techStack?.length) lines.push(`\\textit{Tech: ${proj.techStack.map(escapeLatex).join(', ')}}`);
+  if (proj.role) lines.push(`\\textbf{Role:} ${escapeLatex(proj.role)}`);
+  if (proj.description) lines.push(escapeLatex(proj.description));
   if (proj.responsibilities?.length) lines.push(sectionList(proj.responsibilities));
-  if (proj.outcomes?.length) lines.push('Outcomes: ' + sectionList(proj.outcomes));
   return lines.join(' \\\\\n');
+}
+
+function projectsList(projects) {
+  if (!projects || !projects.length) return '';
+  return projects
+    .filter(p => p.title)
+    .map(p => projectBlock(p))
+    .join('\n\n\\vspace{8pt}\n\n');
+}
+
+function projectBlockModern(proj) {
+  if (!proj || !proj.title) return '';
+  const lines = [];
+  lines.push(`{\\fontsize{11pt}{13pt}\\selectfont\\bfseries ${escapeLatex(proj.title)}} \\\\[2pt]`);
+  if (proj.role) lines.push(`{\\fontsize{8.5pt}{10.5pt}\\selectfont\\color{accent}\\bfseries ${escapeLatex(proj.role)}} \\\\[4pt]`);
+  if (proj.description) lines.push(`{\\fontsize{8.5pt}{11.5pt}\\selectfont ${escapeLatex(proj.description)}} \\\\[6pt]`);
+  if (proj.responsibilities?.length) {
+    lines.push(`\\begin{itemize}[leftmargin=*, label=\\textcolor{accent}{\\faAngleRight}, itemsep=1.5pt, topsep=0pt]`);
+    lines.push(`{\\fontsize{8.5pt}{11pt}\\selectfont\\color{textmain} ${sectionList(proj.responsibilities)}}`);
+    lines.push(`\\end{itemize}`);
+  }
+  return lines.join('\n');
+}
+
+function projectsListModern(projects) {
+  if (!projects || !projects.length) return '';
+  return projects
+    .filter(p => p.title)
+    .map(p => projectBlockModern(p))
+    .join('\n\n\\vspace{10pt}\n\n');
+}
+
+function projectBlockClassic(proj) {
+  if (!proj || !proj.title) return '';
+  const lines = [];
+  lines.push(`{\\fontsize{10pt}{12pt}\\selectfont\\bfseries\\color{dark} ${escapeLatex(proj.title)}} \\\\[2pt]`);
+  if (proj.role) lines.push(`{\\fontsize{8.5pt}{10pt}\\selectfont\\color{accent}\\bfseries ${escapeLatex(proj.role)}} \\\\[4pt]`);
+  if (proj.description) lines.push(`{\\fontsize{8.5pt}{11pt}\\selectfont ${escapeLatex(proj.description)}}`);
+  return lines.join('\n');
+}
+
+function projectsListClassic(projects) {
+  if (!projects || !projects.length) return '';
+  return projects
+    .filter(p => p.title)
+    .map(p => projectBlockClassic(p))
+    .join('\n\n\\vspace{8pt}\n\n');
 }
 
 function projectResponsibilitiesText(arr) {
@@ -81,7 +128,8 @@ function strengthsList(arr) {
 
 export function buildLatexData(dossier) {
   const p = dossier.profile || {};
-  const cp = dossier.capstoneProject || {};
+  const projects = dossier.projects || (dossier.capstoneProject ? [dossier.capstoneProject] : []);
+  const cp = projects[0] || {};
 
   let socialLine = '';
   if (p.linkedIn || p.github) {
@@ -102,7 +150,9 @@ export function buildLatexData(dossier) {
     track: escapeLatex(p.track || ''),
     education: educationBlock(dossier.education),
     technicalSkills: skillsByCategory(dossier.technicalSkills),
-    capstone: projectBlock(dossier.capstoneProject),
+    projects: projectsList(projects),
+    projectsModern: projectsListModern(projects),
+    projectsClassic: projectsListClassic(projects),
     capstoneTitle: escapeLatex(cp.title || ''),
     capstoneRole: escapeLatex(cp.role || ''),
     capstoneDescription: escapeLatex(cp.description || ''),
@@ -175,10 +225,10 @@ function getExecutiveLatexContent() {
 <<technicalSkills>>
 
 \\vspace{10pt}
-\\textbf{PROJECTS} \\\\
-<<capstone>>
+\\textbf{PROJECTS} \\
+<<projects>>
 
-\\end{document}`;
+\end{document}`;
 }
 
 function getModernLatexContent() {
@@ -251,13 +301,8 @@ function getModernLatexContent() {
     }
 
     \\vspace{15pt}
-    {\\fontsize{13pt}{15pt}\\selectfont\\bfseries\\color{dark} Key Projects} \\vspace{3pt} \\hrule \\vspace{6pt}
-    {\\fontsize{11pt}{13pt}\\selectfont\\bfseries <<capstoneTitle>>} \\\\[2pt]
-    {\\fontsize{8.5pt}{10.5pt}\\selectfont\\color{accent}\\bfseries <<capstoneRole>>} \\\\[4pt]
-    {\\fontsize{8.5pt}{11.5pt}\\selectfont <<capstoneDescription>>} \\\\[6pt]
-    \\begin{itemize}[leftmargin=*, label=\\textcolor{accent}{\\faAngleRight}, itemsep=1.5pt, topsep=0pt]
-        {\\fontsize{8.5pt}{11pt}\\selectfont\\color{textmain} <<capstoneResponsibilities>>}
-    \\end{itemize}
+    {\\fontsize{13pt}{15pt}\\selectfont\\bfseries\\color{dark} Professional Projects} \\vspace{3pt} \\hrule \\vspace{6pt}
+    <<projectsModern>>
 
     \\vspace{15pt}
     {\\fontsize{13pt}{15pt}\\selectfont\\bfseries\\color{dark} Technical Expertise} \\vspace{3pt} \\hrule \\vspace{6pt}
@@ -330,10 +375,8 @@ function getClassicLatexContent() {
 \\begin{multicols}{2}
     \\columnsep=20pt
     
-    \\section*{Featured Project}
-    {\\fontsize{10pt}{12pt}\\selectfont\\bfseries\\color{dark} <<capstoneTitle>>} \\\\\[2pt]
-    {\\fontsize{8.5pt}{10pt}\\selectfont\\color{accent}\\bfseries <<capstoneRole>>} \\\\\[4pt]
-    {\\fontsize{8.5pt}{11pt}\\selectfont <<capstoneDescription>>}
+    \\section*{Professional Projects}
+    <<projectsClassic>>
 
     \\section*{Education}
     {\\fontsize{9pt}{11pt}\\selectfont <<education>>}
