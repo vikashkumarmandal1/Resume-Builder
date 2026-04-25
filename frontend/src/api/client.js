@@ -1,6 +1,6 @@
 import { getStoredToken } from '../context/AuthContext';
 
-const API = '/api';
+const API = import.meta.env.VITE_API_URL || '/api';
 
 function headers(includeAuth = true) {
   const h = { 'Content-Type': 'application/json' };

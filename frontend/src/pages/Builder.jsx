@@ -492,14 +492,14 @@ export default function Builder() {
                      <h2 className="text-2xl font-bold text-slate-900 dark:text-white">{currentStep.title}</h2>
                      <p className="text-slate-500 dark:text-slate-400 text-sm mt-1">Section {step + 1} of {STEPS.length}</p>
                    </div>
-                   <div className="hidden sm:block">
+                   {/* <div className="hidden sm:block">
                       <div className="text-right">
                         <div className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">Dossier Status</div>
                         <div className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${savedId ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400' : 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400'}`}>
                           {savedId ? 'Synced to Cloud' : 'Draft Only'}
                         </div>
                       </div>
-                   </div>
+                   </div> */}
                 </div>
 
                 {StepComponent && (
